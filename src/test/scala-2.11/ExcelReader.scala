@@ -1,0 +1,3 @@
+trait ExcelReader {
+  def read() = ???
+}

@@ -8,6 +8,7 @@ fork := true
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.0" % "test",
+  "org.apache.poi" % "poi" % "3.13" % "test",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test",
   "org.seleniumhq.selenium" % "selenium-java" % "2.46.0" % "test",
   "org.pegdown" % "pegdown" % "1.0.2" % "test"
