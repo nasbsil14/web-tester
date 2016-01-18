@@ -8,22 +8,22 @@ import org.scalatest.Matchers._
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.support.ui.{ ExpectedCondition, WebDriverWait }
 
-class TestSeleniumSpec extends FlatSpec
-with BeforeAndAfterAll
-with TestDriver {
-  val conf: Config = ConfigFactory.load()
-  val testCase: TestCase = createTestCase()
+class TestSeleniumSpec extends FlatSpec with BeforeAndAfterAll with TestDriver {
 
   it should "Google Search" in {
-    val commands: Seq[Command] = Seq(Command("click","q",""), Command("enter","","Cheese!"), Command("capture","",""))
+    val commands: Seq[Command] = Seq(
+      Command("click","q","")
+      , Command("enter","","Cheese!")
+      , Command("capture","","")
+    )
 //    commands :+ Command("click","q","")
 //    commands :+ Command("enter","","Cheese!")
 //    commands :+ Command("capture","","")
 
     println(commands.length)
 
-    val testCase = TestCase("https://www.google.co.jp/", commands)
-    testCase.testStart()
+    val testCase: TestCase = TestCase("https://www.google.co.jp/", commands)
+    testCase.start()
 
 //    go to ("https://www.google.co.jp/")
 //
@@ -52,9 +52,5 @@ with TestDriver {
   override def afterAll(): Unit = {
     println("after")
     quit()
-  }
-  def createTestCase(): TestCase = {
-    val commands: Seq[Command] = Nil
-    TestCase("", commands)
   }
 }

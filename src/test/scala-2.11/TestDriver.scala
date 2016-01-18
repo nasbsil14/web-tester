@@ -3,16 +3,17 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.ie.InternetExplorerDriver
 import org.openqa.selenium.safari.SafariDriver
-import org.scalatest.selenium.{Driver, WebBrowser}
+import org.scalatest.selenium.WebBrowser
 import com.typesafe.config.{Config, ConfigFactory}
 
-trait TestDriver extends WebBrowser with Driver {
+trait TestDriver extends WebBrowser {
+  implicit val conf: Config = TestDriver.conf
   implicit val webDriver: WebDriver = TestDriver.driver
 }
 
 object TestDriver {
-  val conf:Config = ConfigFactory.load()
-  val driver: WebDriver = selectDriver
+  val conf: Config = ConfigFactory.load()
+  val driver: WebDriver = selectDriver()
 
   private def selectDriver(): WebDriver = {
     Option(conf.getString("selenium.browser")).map { _.toLowerCase } match {
