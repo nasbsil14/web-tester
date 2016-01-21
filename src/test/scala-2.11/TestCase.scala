@@ -4,7 +4,7 @@ import com.typesafe.config.{ConfigFactory, Config}
 import org.openqa.selenium.WebDriver
 import org.scalatest.selenium.WebBrowser
 
-case class TestCase(targetUrl: String, commands: Seq[Command], implicit val webDriver: WebDriver) extends WebBrowser {
+case class TestCase(targetUrl: String, commands: Seq[Command])(implicit val webDriver: WebDriver) extends WebBrowser {
   def start(): Unit = {
     go to targetUrl
     commands.foreach(cmd => cmd.exec())
@@ -22,7 +22,7 @@ object Operation {
   case object CAPTURE extends Operation
 }
 
-case class Command(operation: Operation, target: Option[String], data: Option[String], implicit val webDriver: WebDriver) extends WebBrowser {
+case class Command(operation: Operation, target: Option[String], data: Option[String])(implicit val webDriver: WebDriver) extends WebBrowser {
   def exec(): Unit = {
     operation match {
       case Operation.CLICK => {
@@ -40,15 +40,15 @@ case class Command(operation: Operation, target: Option[String], data: Option[St
       case Operation.CAPTURE => {
         val df:String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))
         //TODO ここだとPATHの前にデフォルトで「var/〜」とかついてうまくいかない
-        //capture to conf.getString("selenium.capture_dir") + s"$df.png"
+        println()
+        capture to s"$df.png"
         println("capture")
       }
     }
   }
 }
 object Command {
-  def apply(operation: String, target: String, data: String): Command = {
-    //implicitできない・・・
+  def apply(operation: String, target: String, data: String)(implicit webDriver: WebDriver): Command = {
     operation match {
       case "click" => Command(Operation.CLICK, Some(target), None)
       case "enter" => Command(Operation.ENTER, None, Some(data))
