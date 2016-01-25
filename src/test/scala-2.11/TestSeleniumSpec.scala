@@ -1,7 +1,6 @@
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import com.typesafe.config.{ConfigFactory, Config}
 import org.scalatest.{FlatSpec, BeforeAndAfterAll, FunSpec}
 import org.scalatest.Matchers._
 
@@ -11,18 +10,18 @@ import org.openqa.selenium.support.ui.{ ExpectedCondition, WebDriverWait }
 class TestSeleniumSpec extends FlatSpec with BeforeAndAfterAll with TestDriver {
 
   it should "Google Search" in {
-    val commands: Seq[Command] = Seq(
-      Command("click","q","")
-      , Command("enter","","Cheese!")
-      , Command("capture","","")
-    )
-//    commands :+ Command("click","q","")
-//    commands :+ Command("enter","","Cheese!")
-//    commands :+ Command("capture","","")
+    val reader = DocumentReader.reader
+    val commands: Seq[Command] = reader.createCommandList
+//    val commands: Seq[Command] = Seq(
+//      Command("click","q","")
+//      , Command("enter","","Cheese!")
+//      , Command("capture","","")
+//    )
 
     println(commands.length)
 
     val testCase: TestCase = TestCase("https://www.google.co.jp/", commands)
+    testCase.setCaptureDir(Setting.conf.getString("selenium.capture_dir"))
     testCase.start()
 
 //    go to ("https://www.google.co.jp/")
@@ -47,7 +46,7 @@ class TestSeleniumSpec extends FlatSpec with BeforeAndAfterAll with TestDriver {
   override def beforeAll(): Unit = {
     println("before")
     //println(System.getProperty("webdriver.chrome.driver"))
-    setCaptureDir(conf.getString("selenium.capture_dir"))
+    //setCaptureDir(Setting.conf.getString("selenium.capture_dir"))
   }
   override def afterAll(): Unit = {
     println("after")
